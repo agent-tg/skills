@@ -15,13 +15,14 @@ Run three phases in order. **Stop at the end of Phase 1 and Phase 2** and wait f
 
 Answer the prompt "find all of the implicit state machines in this app". Read-only.
 
-1. Sweep the whole app: UI state hooks and refs, stores, adapters, server functions, SQL, jobs, importers. Include status columns, lease and lock fields, idempotency keys, retry counters, and states derived from missing or present values.
-2. Group findings into workflow families per module. For each: where it lives (`path:line`), the situations it can be in, the flags that encode them, and what is at stake (data loss, double write, wrong delete, stale display, cosmetic).
-3. Classify each family: **risky** (save, upload, sync, delete, money, merge, auth restore), **tidy-only**, or **leave alone** (simple toggles, labels that claim nothing).
-4. Save the catalog as a dated report inside the project's own reports folder. Never leave the only copy in a temp directory; later phases depend on it.
-5. Report in plain English: counts by module, the risky families, and what the audit did not do (no tests run, not exhaustive, groupings are analytical, not confirmed bugs).
+1. Sweep the whole app: UI state hooks and refs, stores, adapters, server functions, SQL, scheduled jobs, importers. Include status columns, lease and lock fields, idempotency keys, retry counters, and states derived from missing or present values. Skip generated, vendored and build output. Skim pure calculation code. Say what was skipped or skimmed.
+2. Use the "Events to ask about in every state" list in [references/state-map-template.md](references/state-map-template.md) as the lens. It is the fastest way to spot a risky family.
+3. Group findings into workflow families per module. A module is one of the app's own feature areas (its navigation or routes); if it has none, use top-level source folders, and keep server jobs and importers as their own modules. For each family: where it lives (`path:line`), the situations it can be in, the flags that encode them, what is at stake (data loss, double write, wrong delete, stale display, cosmetic), and one line on what reading the code suggests could go wrong.
+4. Classify each family: **risky** (save, upload, sync, delete, money, merge, auth restore), **tidy-only**, or **leave alone** (simple toggles, labels that claim nothing).
+5. Save the catalog as a dated report inside the project's own reports folder. If the project has none, use its docs folder or create `docs/reports/`, and say where it went. Never leave the only copy in a temp directory; later phases depend on it.
+6. Report in plain English: counts by module, the risky families, and what the audit did not do (no tests run, not exhaustive, groupings are analytical, not confirmed bugs).
 
-Stop. The catalog is a list of candidates, not a bug list.
+Stop. The catalog is a list of candidates, not a bug list. Do not label anything CONFIRMED or SUSPECTED yet; that needs the step-by-step trace Phase 2 does.
 
 ## Phase 2 — Gameplan
 

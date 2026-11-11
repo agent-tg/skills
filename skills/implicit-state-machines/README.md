@@ -65,7 +65,7 @@ Then start a new session in your project and use the Phase 1 prompt above.
 
 - It finds bugs in how a process flows. It does not find wrong formulas, slow pages, or undersized infrastructure.
 - Phase 1 produces candidates, not confirmed bugs. Phase 2 is where each one is labeled confirmed or suspected.
-- I built it from one real run on one app. Expect to adapt it.
+- I built it from one full run on one app, then tried the first phase on a second app and fixed what was unclear. Expect to adapt it.
 - It follows your project's own rules for testing, review and release. It grants the agent no authority of its own.
 
 ## License

@@ -5,7 +5,7 @@ Write one map per workflow family, saved as a dated report in the project. Use p
 ## Sections
 
 1. **Flag inventory.** A table of every state hook, ref, derived value, storage key and server field that takes part: name, `path:line`, what it means, who sets it.
-2. **States as they exist today.** Use what the code shows, not what it should be. Group into natural sub-machines, for example: editor and save, draft recovery, upload, navigation, ownership and version.
+2. **States as they exist today.** Use what the code shows, not what it should be. Group into the sub-machines this workflow actually has. Common ones in an editor: edit and save, draft recovery, upload, navigation, ownership and version. Common ones in a server job: claim or lock, run, partial progress, publish, failure and cooldown. Leave out any that do not apply.
 3. **Transition table per sub-machine.** State, event, guard, next state, side effects, `path:line`.
 4. **Invalid or unguarded combinations.** For each: the flag combination, a concrete scenario a user could hit, the lines, and a label.
    - **CONFIRMED-by-reading**: the trace is shown step by step.
@@ -30,6 +30,14 @@ Run each of these against every state. The gaps are the findings.
 - A reload after an uncertain outcome.
 - The server or network being unreachable with no timeout.
 
+For server jobs, importers and scheduled work, also ask:
+
+- The job dying halfway through a multi-step write.
+- Two runs starting at the same time, and whether the lock covers every writer or only the job itself.
+- A run killed without cleanup: does its status stay "running" forever?
+- A retry after a partial success: does it repeat the part that already worked?
+- A user saving while the job writes the same rows.
+
 ## Common shapes of the bug
 
 - A button checks one busy flag and forgets another.
@@ -39,3 +47,6 @@ Run each of these against every state. The gaps are the findings.
 - A retry key reused with a changed body, or regenerated for the same body.
 - "Newer" decided by a device clock instead of the server.
 - A banner that implies progress when nothing is polling.
+- A reload that hides or remounts the page and wipes unsaved text.
+- An outage reported as "signed out" or "access denied".
+- A job status that only ever moves forward, with no path out of "running" after a crash.
