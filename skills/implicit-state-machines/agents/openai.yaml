@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implicit State Machines"
+  short_description: "Find, plan and fix hidden state machines"
+  default_prompt: "Use $implicit-state-machines to find all of the implicit state machines in this app, then stop for my review."
