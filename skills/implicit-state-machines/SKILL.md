@@ -9,7 +9,9 @@ Find the places where an app tracks a multi-step process with scattered flags, t
 
 An **implicit state machine** is a process that is really in one situation at a time (clean, edited, saving, uploading, in conflict) but is tracked by separate booleans, refs and nullable fields. Six flags allow 64 combinations; a handful are intended. Bugs live in the rest. The method is always: name the situations, then ask what every event does in each one. "Nobody decided" is a bug.
 
-Run three phases in order. **Stop at the end of Phase 1 and Phase 2** and wait for the owner. Honor review-only, no-push and scope limits from the request and the project's instructions; this skill grants no authority of its own.
+Run three phases in order, as far as the request reaches. "Find" or "audit" means Phase 1 only. "Plan" means through Phase 2. "Fix", "run it all", or a request that sets no limit means all three phases without stopping between them: save each phase's report, then keep going. Honor review-only, no-push and scope limits from the request and the project's instructions; this skill grants no authority of its own.
+
+**Come back to the owner only with a real question.** A real question is one of the four in "When to stop and ask" in [references/fix-lanes.md](references/fix-lanes.md), or approval the project's own rules require. Decide everything else yourself and record the decision in the report. When a question comes up, do not park the run: ask it once, with a recommendation, and keep working every lane the answer does not touch. Hold all questions that can wait and ask them together at the end of the phase, in the multiple-choice format under "Asking the owner". Never ask "should I continue?".
 
 ## Phase 1 — Find
 
@@ -22,7 +24,7 @@ Answer the prompt "find all of the implicit state machines in this app". Read-on
 5. Save the catalog as a dated report inside the project's own reports folder. If the project has none, use its docs folder or create `docs/reports/`, and say where it went. Never leave the only copy in a temp directory; later phases depend on it.
 6. Report in plain English: counts by module, the risky families, and what the audit did not do (no tests run, not exhaustive, groupings are analytical, not confirmed bugs).
 
-Stop. The catalog is a list of candidates, not a bug list. Do not label anything CONFIRMED or SUSPECTED yet; that needs the step-by-step trace Phase 2 does.
+The catalog is a list of candidates, not a bug list. Do not label anything CONFIRMED or SUSPECTED yet; that needs the step-by-step trace Phase 2 does. Stop here only if the request ends at Phase 1.
 
 ## Phase 2 — Gameplan
 
@@ -31,9 +33,9 @@ Turn the catalog into an ordered plan the owner can accept or change.
 1. Rank risky families by harm and likelihood. Recommend one family to do first as the proof of the pattern, then the order for the rest. Name what to leave alone and why.
 2. For the first family, write a **state map** using [references/state-map-template.md](references/state-map-template.md). Label every invalid combination CONFIRMED (trace shown) or SUSPECTED. Do not overstate; nothing has been run yet.
 3. Surface decisions that belong to the owner: behavior choices, anything that deletes recoverable data, paid changes, new features hiding inside a "fix" (say so and keep them out of scope).
-4. Present the plan in plain English: what is confirmed, what is suspected, the proposed steps, and what will not be covered.
+4. Save the plan in plain English next to the catalog: what is confirmed, what is suspected, the proposed steps, and what will not be covered.
 
-Stop for a go-ahead. A recommendation is not approval.
+If the request ends at Phase 2, stop and present the plan. Otherwise go on to Phase 3 with every family that needs no owner decision, and send the owner decisions as one batch of questions. A recommendation is not approval: do not act on a family that waits on an answer.
 
 ## Phase 3 — Fix them all
 
@@ -45,12 +47,46 @@ Read [references/fix-lanes.md](references/fix-lanes.md) before starting lanes. I
 4. **Independent review** before merging anything that touches saved user data, shared code, rewritten test expectations, or a database function. The reviewer did not write the code and gets the diff, not the conclusion.
 5. **Merge, check, release** through the project's normal path. Apply backward-compatible database changes in the order that keeps the live app working.
 6. **Verify live**, and say exactly what was and was not proven.
+7. **Sweep what is left before you call it done.** List every item still open and sort each into one of four piles:
+   - *Fix now*: needs no owner decision, including work that only needs a migration, a small guard, or a proposal you can safely build as a fix. Fix these in this run, through the same tested, reviewed, released path. A run is not finished while this pile has anything in it.
+   - *Ask the owner*: one of the real questions. Ask it in the format below.
+   - *Another repo or tool*: say whose it is and write a ready prompt for that project's agent.
+   - *Leave alone*: tidy-only or not worth the risk. Say why in one line. Tidy-only means nobody would notice and nothing is lost or paid for. Anything that can post twice, pay twice, send twice, overwrite someone's edit or call a route that does not exist is a bug, not a tidy item, however small.
+   There is no fifth pile. "Found but not fixed", "worth doing next" and "say go and I'll fix them" are not allowed endings: if an item needs no decision, fix it; if it needs one, ask it. Bugs noticed outside this skill's lens go through the same four piles.
+8. **After the owner answers, finish.** Build and release what the answers unlock, then update the results report. Do not wait to be told again.
 
-Hold back, and ask the owner about, anything that deletes recoverable data or changes behavior by choice rather than by fix.
+Hold back, and ask the owner about, anything that deletes recoverable data or changes behavior by choice rather than by fix. Finish everything else first, so the owner gets one short list of questions and a finished run, not a paused one.
+
+## Asking the owner
+
+Ask in the chat the owner is using, as one numbered list of multiple-choice questions, so the owner can answer in one line ("1 A, 2 B, 3 A"). Use another channel only when the project's rules send questions there or the owner is away, and never ask the same question in two places.
+
+For each question:
+
+- One plain sentence on what is wrong and who would notice. No code names without a few words of explanation.
+- Two to four lettered choices. Say what each one does and what it risks or costs.
+- Your recommendation first, marked "(recommended)", with one line of why.
+
+Ask at these points: with the gameplan (decisions the plan depends on), when a blocking question comes up mid-fix, and once after the leftover sweep. Batch them; a run should put questions to the owner two or three times, not twenty. Keep working everything the answers do not touch while you wait.
+
+## Closing message
+
+The owner should know in five seconds whether the run is finished. End every run, and answer every "is it all done?", in this shape and nothing longer:
+
+1. First line, one of:
+   - **Done. Safe to close this chat.** Everything found is fixed and live, or deliberately left alone.
+   - **Not done. N things left.** Then the lists below.
+2. **Needs your answer**: the multiple-choice questions, numbered. Omit if empty.
+3. **I am still doing**: what is in progress and when it will be live. Omit if empty.
+4. **Belongs to someone else**: one line each, with the ready prompt. Omit if empty.
+5. **Left alone on purpose**: one line each with the reason. Omit if empty.
+6. One line on proof: what was seen working live and what is tests-only.
+
+Keep it under about 15 lines. No recap of what was fixed, no lane names, no file paths: those live in the results report, linked once. If the first line cannot honestly say "Done", the run goes back to the leftover sweep, not to the owner.
 
 ## Reporting
 
-Use plain English and short sentences. For every family report: fixed (with the user-visible change), ruled out (so nobody re-investigates), left open (with why), and how it was checked. Keep "tests pass", "released", and "seen working live" as three separate claims. A read-only login proves pages load; it does not prove saves.
+The results report is the full record; the chat gets the closing message above. Write the report once, at the end of the last phase the request covers. Use plain English and short sentences. For every family report: fixed (with the user-visible change), ruled out (so nobody re-investigates), left open (with why and which pile from the leftover sweep it is in), and how it was checked. "Left open" should hold only items waiting on an owner answer, owned by another repo, or deliberately left alone. Keep "tests pass", "released", and "seen working live" as three separate claims. A read-only login proves pages load; it does not prove saves.
 
 ## Limits
 
