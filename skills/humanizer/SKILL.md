@@ -8,7 +8,7 @@ description: |
   then adds first person, real opinions, varied rhythm and true specifics.
 license: MIT
 metadata:
-  version: 1.0.0
+  version: 1.0.1
 ---
 
 
@@ -110,7 +110,7 @@ Deleting AI words alone still reads dead. Do these too.
 10. **Add human specificity.** Use exact fields, systems, numbers, names, failure modes, or observed behavior when available. Never invent details.
 11. **Use lists when they improve scanning.** Keep useful steps, fields, options, checks, risks, and recommendations as lists.
 12. **Do not force a tidy ending.** It is fine to end on the last substantive point.
-13. **Take the stance the evidence supports.** Add a caveat only when a real tradeoff exists.
+13. **Take the stance the evidence supports.** Add a caveat only when a real tradeoff exists. State the stance, then give only reasons the text or the chat already contains. Never invent a consequence, cost, number or prediction to back it up. If the source says one printer jammed twice a week and costs $250 less, write "at your volume I'd pay the extra $250," not "jams will cost you more than the $250 difference": the source never measured what jams cost.
 14. **Make every sentence earn its place.** Each should add a fact, reason, decision, example, risk, or next step.
 15. **Let structure follow priority.** Important ideas can take more space. Minor points can remain one line.
 16. **Give it room to breathe.** Write short paragraphs with a blank line between them, the way a person types an email. One idea per paragraph: what it is, then what happens next or what the reader should do. In an email, keep the greeting, each paragraph and the sign-off on their own lines. Keep the paragraph breaks and headings the original had unless one is now empty. A single short paragraph is fine only when there is one idea.

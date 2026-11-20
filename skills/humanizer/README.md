@@ -100,7 +100,7 @@ I ran this skill and the original on these texts and a report closing page, 3 ti
 ## Limits
 
 - **It doesn't check facts.** If your agent got a price or a date wrong, Humanizer keeps it wrong, just in a nicer voice.
-- **Check any opinion it adds.** When it takes a stance, the reasons should come from your text. In one test run it added a judgment of its own. Read it before you send it.
+- **Check any opinion it adds.** When it takes a stance, the reasons should come from your text. An early version once added a judgment of its own. There's a rule against that now, and it held in 3 of 3 test runs, but read it before you send it.
 - **It needs something real from you.** It won't make up a story to sound human. The more your agent knows about how you talk, the more it sounds like you.
 - It edits for people, not for AI detectors.
 - If you have your own voice guide, the skill follows it instead of replacing your voice.
