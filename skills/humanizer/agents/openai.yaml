@@ -1,0 +1,4 @@
+interface:
+  display_name: "Humanizer"
+  short_description: "Cut AI tells and put a real person back in"
+  default_prompt: "Use $humanizer to rewrite this text so it sounds like a person wrote it, without changing any facts."

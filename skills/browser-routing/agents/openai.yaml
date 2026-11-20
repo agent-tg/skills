@@ -1,0 +1,4 @@
+interface:
+  display_name: "Browser Routing"
+  short_description: "Easy way into websites first, then a background browser"
+  default_prompt: "Use $browser-routing to finish this website task: try an API or connector first, then the Aside background browser, and show me proof it worked."
